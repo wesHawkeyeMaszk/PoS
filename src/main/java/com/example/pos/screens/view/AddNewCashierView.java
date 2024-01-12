@@ -14,10 +14,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 
 @Getter
 @Component
-public class LoginView extends JFrame implements ActionListener {
+public class AddNewCashierView extends JFrame implements ActionListener {
 
 
     @Autowired
@@ -30,44 +31,45 @@ public class LoginView extends JFrame implements ActionListener {
     TSVReaderService tsvReaderService;
 
     JPanel panel;
-    JLabel user_label, password_label, message;
+    JLabel user_label, password_label, message, confirmPassword_label;
     JTextField userName_text;
-    JPasswordField password_text;
+    JPasswordField password_text, confirmPasswordText;
     JButton submit, cancel;
     JButton welcome;
     JButton loadNewPriceBook;
-    JButton addNewCashier;
     public void setFrameUp(){
         // Username Label
         user_label = new JLabel();
-        user_label.setText("User Name :");
+        user_label.setText("Enter New User Name :");
         userName_text = new JTextField();
         // Password Label
         password_label = new JLabel();
-        password_label.setText("Password :");
+        password_label.setText("Enter Password :");
         password_text = new JPasswordField();
+
+        confirmPassword_label = new JLabel();
+        confirmPassword_label.setText("Confirm Password :");
+        confirmPasswordText = new JPasswordField();
         // Submit
         submit = new JButton("SUBMIT");
-        panel = new JPanel(new GridLayout(3, 1));
-        welcome = new JButton("WELCOME CLICK TO LOGIN IN");
-        welcome.addActionListener((ActionEvent event) -> closeLogin());
-        loadNewPriceBook = new JButton("WOULD YOU LIKE TO LOAD A NEW PRICE BOOK?");
-        loadNewPriceBook.addActionListener((ActionEvent event) -> loadNewPriceBook() );
-        addNewCashier = new JButton("WOULD YOU LIKE TO ADD A NEW CASHIER?");
-        addNewCashier.addActionListener((ActionEvent event) -> addNewCashier() );
+        panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        welcome = new JButton("WELCOME CLICK TO RETURN TO LOGIN MENU");
+        welcome.addActionListener((ActionEvent event) -> closeAddNewCashier());
         panel.add(user_label);
         panel.add(userName_text);
         panel.add(password_label);
         panel.add(password_text);
+        panel.add(confirmPassword_label);
+        panel.add(confirmPasswordText);
         message = new JLabel();
         panel.add(message);
         panel.add(submit);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // Adding the listeners to components..
         submit.addActionListener(this);
         add(panel, BorderLayout.CENTER);
         setTitle("Please Login Here !");
-        setSize(450,350);
+        setSize(600,350);
     }
 
     @PostConstruct
@@ -80,21 +82,24 @@ public class LoginView extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent ae) {
         String userName = userName_text.getText().trim();
         String password = password_text.getText().trim();
+        String confirmPassword = confirmPasswordText.getText().trim();
 
         try {
-            Cashier cashier = cashierRepository.findByName(userName);
-
-            if (cashier.getCashierPassword().equals(password)){
+            Boolean cashierExists = cashierRepository.findIfExists(userName);
+            if (!cashierExists&&password.equals(confirmPassword)){
                 panel.removeAll();
                 panel.add(welcome);
-                panel.add(loadNewPriceBook);
-                panel.add(addNewCashier);
-                eventController.cashierLoggedIn(userName);
+                eventController.newCashierAdded(userName);
+                cashierRepository.save(new Cashier(userName,password));
                 panel.revalidate();
                 panel.repaint();
             }
-            else {
-                message.setText(" Invalid user.. ");
+            else if (cashierExists){
+                message.setText(" User already exsits ");
+            }
+            else if(!password.equals(confirmPassword)){
+                message.setText(" Passwords must match ");
+
             }
         }
         catch (Exception e){
@@ -102,16 +107,8 @@ public class LoginView extends JFrame implements ActionListener {
         }
     }
 
-    public void loadNewPriceBook(){
-        tsvReaderService.readTSV();
-    }
-
-    public void addNewCashier() {
+    public void closeAddNewCashier(){
         this.setVisible(false); //you can't see me!
-    }
-
-    public void closeLogin(){
-        this.setVisible(false); //you can't see me!
-        this.dispose(); //Destroy the JFrame object
+        this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
 }

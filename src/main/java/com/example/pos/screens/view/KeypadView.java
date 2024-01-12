@@ -3,7 +3,6 @@ package com.example.pos.screens.view;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
@@ -14,7 +13,7 @@ import java.util.ArrayList;
 @Getter
 @Component
 @AllArgsConstructor
-public class PinPadView extends JFrame implements ActionListener {
+public class KeypadView extends JFrame implements ActionListener {
     JPanel numberPanel;
     JLabel display;
     JButton enter;
@@ -25,7 +24,7 @@ public class PinPadView extends JFrame implements ActionListener {
     ArrayList<JButton> buttonList;
     public int changeQuantityAmount = 0;
 
-    public PinPadView() {}
+    public KeypadView() {}
 
     @PostConstruct
     @SuppressWarnings("PMD.UnusedPrivateMethod")
@@ -66,7 +65,6 @@ public class PinPadView extends JFrame implements ActionListener {
         numberPanel.add(clearButton, BorderLayout.PAGE_END);
         add(numberPanel, BorderLayout.CENTER);
         setSize(450,350);
-        setVisible(true);
     }
 
     public void actionPerformed(ActionEvent e) {

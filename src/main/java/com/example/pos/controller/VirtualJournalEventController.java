@@ -129,4 +129,12 @@ public class VirtualJournalEventController {
         cashier = userName;
         server.broadcast(temp);
     }
+
+    public void newCashierAdded(String userName) {
+        String date = simpleDateFormat.format(new Date());
+        String temp = date + "\t" + userName + "\t" + "HAS BEEN ADDED TO THE SYSTEM\n";
+        System.out.print(temp);
+        eventRepository.save(new VirtualJournalEvent(temp));
+        server.broadcast(temp);
+    }
 }
