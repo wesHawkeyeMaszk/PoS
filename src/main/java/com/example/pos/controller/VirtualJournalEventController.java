@@ -20,21 +20,20 @@ import java.util.Date;
 @Getter
 @Setter
 public class VirtualJournalEventController {
+
+    @Autowired
+    VirtualJournalEventRepository eventRepository;
+    @Autowired
+    ShiftRepository shiftRepository;
+    @Autowired
+    CashierRepository cashierRepository;
+    @Autowired
+    Server server;
+
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd HH:mm");
     String register = "REGISTER1";
     String cashier = "DARTH VADER";
     Shift shift;
-    @Autowired
-    VirtualJournalEventRepository eventRepository;
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd HH:mm");
-    @Autowired
-    private ShiftRepository shiftRepository;
-    @Autowired
-    private CashierRepository cashierRepository;
-    @Autowired
-    private Server server;
-
-    VirtualJournalEventController() {
-    }
 
     public void readyToBeginCheckout() {
         String date = simpleDateFormat.format(new Date());

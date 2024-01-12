@@ -7,6 +7,7 @@ import com.example.pos.services.ScanService;
 import com.example.pos.services.ScannerListener;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -19,12 +20,15 @@ import java.util.ArrayList;
 @Getter
 public class EmployeeView extends JFrame implements ScannerListener {
 
-    private final ScanService scanner;
+    @Autowired
+    ScanService scanner;
 
-    private final ItemRepository itemRepository;
+    @Autowired
+    ItemRepository itemRepository;
 
+    @Autowired
+    Checkout checkout;
 
-    private final Checkout checkout;
     private final JPanel bottomQuickButtonPanel = new JPanel();
     private final JPanel rightQuickButtonPanel = new JPanel();
     private final JPanel centerPanel = new JPanel();
@@ -35,12 +39,6 @@ public class EmployeeView extends JFrame implements ScannerListener {
     private final JLabel total = new JLabel("TOTAL:\t");
     JButton changeQuantityButton;
     private ArrayList<Item> itemList;
-
-    public EmployeeView(ScanService scanner, ItemRepository itemRepository, Checkout checkout) {
-        this.scanner = scanner;
-        this.itemRepository = itemRepository;
-        this.checkout = checkout;
-    }
 
     @PostConstruct
     @SuppressWarnings("PMD.UnusedPrivateMethod")

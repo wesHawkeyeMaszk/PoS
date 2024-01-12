@@ -3,6 +3,7 @@ package com.example.pos.screens.controllers;
 import com.example.pos.screens.view.EmployeeView;
 import com.example.pos.services.ScanService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.awt.*;
@@ -15,8 +16,10 @@ import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
 @Controller
 @AllArgsConstructor
 public class EmployeeViewController extends AbstractViewController {
-
+    @Autowired
     private final EmployeeView employeeView;
+
+    @Autowired
     private final PinPadViewController pinPadViewController;
 
     @Override

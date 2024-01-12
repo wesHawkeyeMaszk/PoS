@@ -7,6 +7,7 @@ import com.example.pos.repositories.ShiftRepository;
 import com.example.pos.services.TSVReaderService;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
@@ -17,10 +18,17 @@ import java.awt.event.ActionListener;
 @Getter
 @Component
 public class LoginView extends JFrame implements ActionListener {
-    private final ShiftRepository shiftRepository;
-    private final CashierRepository cashierRepository;
-    private final VirtualJournalEventController eventController;
-    private final TSVReaderService tsvReaderService;
+
+
+    @Autowired
+    ShiftRepository shiftRepository;
+    @Autowired
+    CashierRepository cashierRepository;
+    @Autowired
+    VirtualJournalEventController eventController;
+    @Autowired
+    TSVReaderService tsvReaderService;
+
     JPanel panel;
     JLabel user_label, password_label, message;
     JTextField userName_text;
@@ -28,13 +36,6 @@ public class LoginView extends JFrame implements ActionListener {
     JButton submit, cancel;
     JButton welcome;
     JButton loadNewPriceBook;
-    LoginView(ShiftRepository shiftRepository, CashierRepository cashierRepository, VirtualJournalEventController eventController, TSVReaderService tsvReaderService) {
-        this.shiftRepository = shiftRepository;
-        this.cashierRepository = cashierRepository;
-        this.eventController = eventController;
-        this.tsvReaderService = tsvReaderService;
-    }
-
     public void setFrameUp(){
         // Username Label
         user_label = new JLabel();
