@@ -42,19 +42,24 @@ public class LoginView extends JFrame implements ActionListener {
         user_label = new JLabel();
         user_label.setText("User Name :");
         userName_text = new JTextField();
+        userName_text.setPreferredSize(new Dimension(50,20));
         // Password Label
         password_label = new JLabel();
         password_label.setText("Password :");
         password_text = new JPasswordField();
+        password_text.setPreferredSize(new Dimension(50,20));
         // Submit
         submit = new JButton("SUBMIT");
         panel = new JPanel(new GridLayout(3, 1));
         welcome = new JButton("WELCOME CLICK TO LOGIN IN");
         welcome.addActionListener((ActionEvent event) -> closeLogin());
+        welcome.setPreferredSize(new Dimension(100,20));
         loadNewPriceBook = new JButton("WOULD YOU LIKE TO LOAD A NEW PRICE BOOK?");
         loadNewPriceBook.addActionListener((ActionEvent event) -> loadNewPriceBook() );
+        loadNewPriceBook.setPreferredSize(new Dimension(100,20));
         addNewCashier = new JButton("WOULD YOU LIKE TO ADD A NEW CASHIER?");
         addNewCashier.addActionListener((ActionEvent event) -> addNewCashier() );
+        addNewCashier.setPreferredSize(new Dimension(100,20));
         panel.add(user_label);
         panel.add(userName_text);
         panel.add(password_label);
@@ -67,13 +72,16 @@ public class LoginView extends JFrame implements ActionListener {
         submit.addActionListener(this);
         add(panel, BorderLayout.CENTER);
         setTitle("Please Login Here !");
-        setSize(450,350);
+        setSize(400,200);
+        this.setLocationRelativeTo(null);
     }
 
     @PostConstruct
     @SuppressWarnings("PMD.UnusedPrivateMethod")
     private void prepareFrame() {
+
         setFrameUp();
+        //pack();
     }
 
     @Override

@@ -67,7 +67,9 @@ public class EmployeeView extends JFrame implements ScannerListener {
         //SET PANEL LAYOUTS
         bottomQuickButtonPanel.setLayout(new GridLayout(2, 6));
         rightQuickButtonPanel.setLayout(new GridLayout(3, 4));
+        rightQuickButtonPanel.setPreferredSize(new Dimension(600,300));
         leftReceiptPanel.setLayout(new BoxLayout(leftReceiptPanel, BoxLayout.Y_AXIS));
+        leftReceiptPanel.setPreferredSize(new Dimension(400,1000));
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
 
         bottomQuickButtonPanel.setBackground(Color.CYAN);
@@ -136,7 +138,7 @@ public class EmployeeView extends JFrame implements ScannerListener {
         mainContainer.add(centerPanel, BorderLayout.CENTER);
 
         setTitle("Register");
-        setSize(1500, 1000);
+        setSize(1400, 800);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
@@ -226,6 +228,7 @@ public class EmployeeView extends JFrame implements ScannerListener {
         for (int i = 0; i < 12; i++) {
             final int finalI = i;
             JButton temp = createButton(itemList.get(i));
+            temp.setPreferredSize(new Dimension(50,50));
             temp.addActionListener((ActionEvent event) -> addLineItem(itemList.get(finalI)));
             bottomQuickButtonPanel.add(temp);
         }
@@ -235,6 +238,7 @@ public class EmployeeView extends JFrame implements ScannerListener {
         for (int i = 12; i < 18; i++) {
             final int finalI = i;
             JButton temp = createButton(itemList.get(i));
+            temp.setPreferredSize(new Dimension(50,50));
             temp.addActionListener((ActionEvent event) -> addLineItem(itemList.get(finalI)));
             rightQuickButtonPanel.add(temp);
         }
