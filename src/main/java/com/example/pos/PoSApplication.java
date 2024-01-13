@@ -13,7 +13,6 @@ import javax.swing.*;
 public class PoSApplication extends JFrame {
 
     public static void main(String... args) {
-        Register register = new Register();
         ConfigurableApplicationContext context = createApplicationContext(args);
         displayLoginFrame(context);
         try {

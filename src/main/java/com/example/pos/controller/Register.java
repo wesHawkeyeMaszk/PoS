@@ -6,7 +6,11 @@ import com.example.pos.repository.ItemRepository;
 import com.example.pos.screens.view.EmployeeView;
 import com.example.pos.services.ScanService;
 import com.example.pos.services.ScannerListener;
+import jakarta.annotation.PostConstruct;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,14 +18,11 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 
-@Getter
+@Data
 @Component
 public class Register implements ScannerListener {
     @Autowired
     ScanService scanService;
-
-    @Autowired
-    EmployeeView employeeView;
 
     @Autowired
     ItemRepository itemRepository;
@@ -34,7 +35,8 @@ public class Register implements ScannerListener {
     ArrayList<Item> itemButtonList;
     private int transactionNumber;
 
-    public Register() {
+    @PostConstruct
+    private void begin() {
         scanService = new ScanService();
         scanService.addScannerListener(this);
         hasBasket = false;
@@ -42,7 +44,6 @@ public class Register implements ScannerListener {
         journalEventController.readyToBeginCheckout();
         transactionNumber = 0;
     }
-
     @Override
     public void onScan(String scan) {
         if(!hasBasket) {
@@ -54,10 +55,13 @@ public class Register implements ScannerListener {
         }
     }
 
-    public void addMultiItemToBasket(Item itemToChangeQuantity, int quantityChange) {
-        employeeView.changeQuantity(quantityChange);
-        basket.addMultiItemToBasket(itemToChangeQuantity,quantityChange);
-        journalEventController.addItemToTransaction(itemToChangeQuantity, String.valueOf(transactionNumber));
+    public void addMultiItemToBasket(int quantityChange) {
+        if(!hasBasket) {
+            buildNewBasket();
+        }
+        Item item = basket.removeLastItemFromBasket();
+        basket.addMultiItemToBasket(item,quantityChange);
+        journalEventController.addItemToTransaction(item, String.valueOf(transactionNumber));
     }
 
     public void removeLastItemFromBasket() {
@@ -81,6 +85,7 @@ public class Register implements ScannerListener {
 
     public void readyForCheckout() {
         hasBasket = false;
+        basket = new Basket();
         journalEventController.readyToBeginCheckout();
     }
 
@@ -120,7 +125,9 @@ public class Register implements ScannerListener {
     }
 
     public void addItemToBasket(Item item) {
-        employeeView.addLineItem(item);
+        if(!hasBasket) {
+            buildNewBasket();
+        }
         basket.addItemToBasket(item);
         journalEventController.addItemToTransaction(item, String.valueOf(transactionNumber));
     }

@@ -121,6 +121,7 @@ public class EmployeeView extends JFrame {
     }
 
     public void addLineItem(Item item) {
+        register.addItemToBasket(item);
         JLabel temp = new JLabel("1\t" + item.getItemName() + "\t" + item.getItemValue());
         temp.setAlignmentX(Component.CENTER_ALIGNMENT);
         temp.setFont(new Font("Courier New", Font.BOLD, 12));
@@ -190,8 +191,7 @@ public class EmployeeView extends JFrame {
     public void changeQuantity(int changeValue) {
         if (register.getHasBasket()) {
             Item itemToChangeQuantity = register.returnLastItem();
-            register.removeLastItemFromBasket();
-            register.addMultiItemToBasket(itemToChangeQuantity, changeValue);
+            register.addMultiItemToBasket(changeValue);
             addMultipleLineItem(itemToChangeQuantity, changeValue);
         }
     }
@@ -220,5 +220,7 @@ public class EmployeeView extends JFrame {
         tax.setText("TAX:\t" + register.getTaxTotal());
         total.setText("TOTAL:\t" + register.getTotal());
         subtotal.setText("SUBTOTAL:\t" + register.getSubtotal());
+        centerPanel.revalidate();
+        centerPanel.repaint();
     }
 }
