@@ -1,9 +1,5 @@
 package com.example.pos.services;
 
-import com.example.pos.controller.Checkout;
-import com.example.pos.model.Item;
-import com.example.pos.repositories.ItemRepository;
-import com.example.pos.screens.view.EmployeeView;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;

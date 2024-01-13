@@ -1,12 +1,9 @@
-package com.example.pos.repositories;
+package com.example.pos.repository;
 
-import com.example.pos.model.Item;
 import com.example.pos.model.Shift;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.ArrayList;
 
 @Repository
 public interface ShiftRepository extends CrudRepository<Shift, Integer> {

@@ -1,5 +1,6 @@
 package com.example.pos;
 
+import com.example.pos.controller.Register;
 import com.example.pos.screens.controllers.LoginViewController;
 import com.example.pos.sockets.Server;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,6 +13,7 @@ import javax.swing.*;
 public class PoSApplication extends JFrame {
 
     public static void main(String... args) {
+        Register register = new Register();
         ConfigurableApplicationContext context = createApplicationContext(args);
         displayLoginFrame(context);
         try {

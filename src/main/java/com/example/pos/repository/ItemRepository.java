@@ -1,4 +1,4 @@
-package com.example.pos.repositories;
+package com.example.pos.repository;
 
 import com.example.pos.model.Item;
 import org.springframework.data.jpa.repository.Query;

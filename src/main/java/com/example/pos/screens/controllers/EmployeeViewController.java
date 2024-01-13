@@ -35,8 +35,8 @@ public class EmployeeViewController extends AbstractViewController {
     public void setFocusManager() {
         KeyboardFocusManager manager =
                 KeyboardFocusManager.getCurrentKeyboardFocusManager();
-        manager.addKeyEventDispatcher(employeeView.getScanner());
-        employeeView.getCheckout().readyForCheckout();
+        manager.addKeyEventDispatcher(employeeView.getRegister().getScanService());
+        employeeView.getRegister().readyForCheckout();
     }
 
     private void openPinPadView() {

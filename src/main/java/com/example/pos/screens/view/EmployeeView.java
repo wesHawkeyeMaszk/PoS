@@ -1,10 +1,7 @@
 package com.example.pos.screens.view;
 
-import com.example.pos.controller.Checkout;
+import com.example.pos.controller.Register;
 import com.example.pos.model.Item;
-import com.example.pos.repositories.ItemRepository;
-import com.example.pos.services.ScanService;
-import com.example.pos.services.ScannerListener;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,21 +10,14 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
 
 
 @org.springframework.stereotype.Component
 @Getter
-public class EmployeeView extends JFrame implements ScannerListener {
+public class EmployeeView extends JFrame {
 
     @Autowired
-    ScanService scanner;
-
-    @Autowired
-    ItemRepository itemRepository;
-
-    @Autowired
-    Checkout checkout;
+    Register register;
 
     private final JPanel bottomQuickButtonPanel = new JPanel();
     private final JPanel rightQuickButtonPanel = new JPanel();
@@ -38,24 +28,11 @@ public class EmployeeView extends JFrame implements ScannerListener {
     private final JLabel tax = new JLabel("TAX:\t");
     private final JLabel total = new JLabel("TOTAL:\t");
     JButton changeQuantityButton;
-    private ArrayList<Item> itemList;
 
     @PostConstruct
     @SuppressWarnings("PMD.UnusedPrivateMethod")
     private void prepareFrame() {
-        scanner.addScannerListener(this);
-        this.itemList = itemRepository.findQuantity(24);
         setFrameUp();
-    }
-
-
-    public void onScan(String scan) {
-        if(scan.contains("QUANTITY CHANGE:")) {
-            changeQuantity(Integer.parseInt(scan.substring("QUANTITY CHANGE:".length(),scan.length())));
-        }
-        else {
-            addLineItem(itemRepository.findItemByUPC(scan));
-        }
     }
 
     private void setFrameUp() {
@@ -67,9 +44,9 @@ public class EmployeeView extends JFrame implements ScannerListener {
         //SET PANEL LAYOUTS
         bottomQuickButtonPanel.setLayout(new GridLayout(2, 6));
         rightQuickButtonPanel.setLayout(new GridLayout(3, 4));
-        rightQuickButtonPanel.setPreferredSize(new Dimension(600,300));
+        rightQuickButtonPanel.setPreferredSize(new Dimension(600, 300));
         leftReceiptPanel.setLayout(new BoxLayout(leftReceiptPanel, BoxLayout.Y_AXIS));
-        leftReceiptPanel.setPreferredSize(new Dimension(400,1000));
+        leftReceiptPanel.setPreferredSize(new Dimension(400, 1000));
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
 
         bottomQuickButtonPanel.setBackground(Color.CYAN);
@@ -148,15 +125,14 @@ public class EmployeeView extends JFrame implements ScannerListener {
         temp.setAlignmentX(Component.CENTER_ALIGNMENT);
         temp.setFont(new Font("Courier New", Font.BOLD, 12));
         leftReceiptPanel.add(temp);
-        checkout.addItemToBasket(item);
         updateJLabelTrackers();
         leftReceiptPanel.revalidate();
         leftReceiptPanel.repaint();
     }
 
     public void addMultipleLineItem(Item item, int quantity) {
-        double value = Double.parseDouble(item.getItemValue())*quantity;
-        JLabel temp = new JLabel(quantity+"\t" + item.getItemName() + "\t" + value);
+        double value = Double.parseDouble(item.getItemValue()) * quantity;
+        JLabel temp = new JLabel(quantity + "\t" + item.getItemName() + "\t" + value);
         temp.setAlignmentX(Component.CENTER_ALIGNMENT);
         temp.setFont(new Font("Courier New", Font.BOLD, 12));
         leftReceiptPanel.remove(leftReceiptPanel.getComponents().length - 1);
@@ -170,7 +146,7 @@ public class EmployeeView extends JFrame implements ScannerListener {
         Component[] componentList = leftReceiptPanel.getComponents();
         if (componentList.length > 2) {
             leftReceiptPanel.remove(componentList.length - 1);
-            checkout.removeLastItemFromBasket();
+            register.removeLastItemFromBasket();
             updateJLabelTrackers();
             leftReceiptPanel.revalidate();
             leftReceiptPanel.repaint();
@@ -189,65 +165,60 @@ public class EmployeeView extends JFrame implements ScannerListener {
 
     public void payByCredit() {
         removeAllLeftPanelComponents();
-        checkout.payByCredit();
+        register.payByCredit();
         updateJLabelTrackers();
     }
 
     public void payExactDollar() {
         removeAllLeftPanelComponents();
-        checkout.payExactDollar();
+        register.payExactDollar();
         updateJLabelTrackers();
     }
 
     public void payNextDollar() {
         removeAllLeftPanelComponents();
-        checkout.payNextDollar();
+        register.payNextDollar();
         updateJLabelTrackers();
     }
 
     public void voidTransaction() {
         removeAllLeftPanelComponents();
-        checkout.voidTransaction();
+        register.voidTransaction();
         updateJLabelTrackers();
     }
 
     public void changeQuantity(int changeValue) {
-        if(checkout.getItemQuantity()>0) {
-            Item itemToChangeQuantity = checkout.returnLastItem();
-            checkout.removeLastItemFromBasket();
-            checkout.addMultiItemToBasket(itemToChangeQuantity,changeValue);
-            addMultipleLineItem(itemToChangeQuantity,changeValue);
+        if (register.getHasBasket()) {
+            Item itemToChangeQuantity = register.returnLastItem();
+            register.removeLastItemFromBasket();
+            register.addMultiItemToBasket(itemToChangeQuantity, changeValue);
+            addMultipleLineItem(itemToChangeQuantity, changeValue);
         }
-    }
-
-    public JButton createButton(Item item) {
-        return new JButton("ADD\t1\t" + item.getItemName());
     }
 
     public void addBottomButtons() {
         for (int i = 0; i < 12; i++) {
-            final int finalI = i;
-            JButton temp = createButton(itemList.get(i));
-            temp.setPreferredSize(new Dimension(50,50));
-            temp.addActionListener((ActionEvent event) -> addLineItem(itemList.get(finalI)));
-            bottomQuickButtonPanel.add(temp);
+            bottomQuickButtonPanel.add(buttonFactory(register.getItemButtonList().get(i)));
         }
     }
 
     public void addRightButtons() {
         for (int i = 12; i < 18; i++) {
-            final int finalI = i;
-            JButton temp = createButton(itemList.get(i));
-            temp.setPreferredSize(new Dimension(50,50));
-            temp.addActionListener((ActionEvent event) -> addLineItem(itemList.get(finalI)));
-            rightQuickButtonPanel.add(temp);
+            rightQuickButtonPanel.add(buttonFactory(register.getItemButtonList().get(i)));
         }
     }
 
+    private JButton buttonFactory(Item item) {
+        JButton temp = new JButton("ADD\t1\t" + item.getItemName());
+        temp.setPreferredSize(new Dimension(50, 50));
+        temp.addActionListener((ActionEvent event) -> addLineItem(item));
+        return temp;
+    }
+
     public void updateJLabelTrackers() {
-        quantity.setText("QUANTITY:\t" + checkout.getItemQuantity());
-        tax.setText("TAX:\t" + checkout.getTaxTotal());
-        total.setText("TOTAL:\t" + checkout.getTotal());
-        subtotal.setText("SUBTOTAL:\t" + checkout.getSubtotal());
+        quantity.setText("QUANTITY:\t" + register.getItemQuantity());
+        tax.setText("TAX:\t" + register.getTaxTotal());
+        total.setText("TOTAL:\t" + register.getTotal());
+        subtotal.setText("SUBTOTAL:\t" + register.getSubtotal());
     }
 }

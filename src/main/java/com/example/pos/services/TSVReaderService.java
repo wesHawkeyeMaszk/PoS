@@ -1,7 +1,7 @@
 package com.example.pos.services;
 
 import com.example.pos.model.Item;
-import com.example.pos.repositories.ItemRepository;
+import com.example.pos.repository.ItemRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

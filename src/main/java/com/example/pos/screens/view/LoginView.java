@@ -2,8 +2,8 @@ package com.example.pos.screens.view;
 
 import com.example.pos.controller.VirtualJournalEventController;
 import com.example.pos.model.Cashier;
-import com.example.pos.repositories.CashierRepository;
-import com.example.pos.repositories.ShiftRepository;
+import com.example.pos.repository.CashierRepository;
+import com.example.pos.repository.ShiftRepository;
 import com.example.pos.services.TSVReaderService;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
