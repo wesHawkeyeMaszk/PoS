@@ -1,8 +1,8 @@
 package com.example.pos.screens.controllers;
 
 import com.example.pos.screens.view.EmployeeView;
-import com.example.pos.services.ScanService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.awt.*;
@@ -10,14 +10,14 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
-import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
-
 @Controller
 @AllArgsConstructor
 public class EmployeeViewController extends AbstractViewController {
+    @Autowired
+    EmployeeView employeeView;
 
-    private final EmployeeView employeeView;
-    private final PinPadViewController pinPadViewController;
+    @Autowired
+    KeypadViewController keypadViewController;
 
     @Override
     public void prepareAndOpenFrame() {
@@ -26,10 +26,10 @@ public class EmployeeViewController extends AbstractViewController {
         setFocusManager();
         WindowListener listener = new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                employeeView.changeQuantity(pinPadViewController.getFrame().changeQuantityAmount);
+                employeeView.changeQuantity(keypadViewController.getFrame().changeQuantityAmount);
             }
         };
-        pinPadViewController.getFrame().addWindowListener(listener);
+        keypadViewController.getFrame().addWindowListener(listener);
     }
 
     public void setFocusManager() {
@@ -40,7 +40,7 @@ public class EmployeeViewController extends AbstractViewController {
     }
 
     private void openPinPadView() {
-        pinPadViewController.prepareAndOpenFrame();
+        keypadViewController.prepareAndOpenFrame();
     }
 
 

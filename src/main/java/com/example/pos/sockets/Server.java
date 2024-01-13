@@ -21,13 +21,11 @@ public class Server {
     public void start(int port) throws IOException {
         // server is listening on port 5056
         ServerSocket serverSocket = new ServerSocket(port);
-
         // running infinite loop for getting
         // client request
         while (true)
         {
             Socket s = null;
-
             try
             {
                 // socket object to receive incoming client requests

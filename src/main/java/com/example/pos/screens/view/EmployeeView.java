@@ -7,6 +7,7 @@ import com.example.pos.services.ScanService;
 import com.example.pos.services.ScannerListener;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -19,12 +20,15 @@ import java.util.ArrayList;
 @Getter
 public class EmployeeView extends JFrame implements ScannerListener {
 
-    private final ScanService scanner;
+    @Autowired
+    ScanService scanner;
 
-    private final ItemRepository itemRepository;
+    @Autowired
+    ItemRepository itemRepository;
 
+    @Autowired
+    Checkout checkout;
 
-    private final Checkout checkout;
     private final JPanel bottomQuickButtonPanel = new JPanel();
     private final JPanel rightQuickButtonPanel = new JPanel();
     private final JPanel centerPanel = new JPanel();
@@ -35,12 +39,6 @@ public class EmployeeView extends JFrame implements ScannerListener {
     private final JLabel total = new JLabel("TOTAL:\t");
     JButton changeQuantityButton;
     private ArrayList<Item> itemList;
-
-    public EmployeeView(ScanService scanner, ItemRepository itemRepository, Checkout checkout) {
-        this.scanner = scanner;
-        this.itemRepository = itemRepository;
-        this.checkout = checkout;
-    }
 
     @PostConstruct
     @SuppressWarnings("PMD.UnusedPrivateMethod")
@@ -69,7 +67,9 @@ public class EmployeeView extends JFrame implements ScannerListener {
         //SET PANEL LAYOUTS
         bottomQuickButtonPanel.setLayout(new GridLayout(2, 6));
         rightQuickButtonPanel.setLayout(new GridLayout(3, 4));
+        rightQuickButtonPanel.setPreferredSize(new Dimension(600,300));
         leftReceiptPanel.setLayout(new BoxLayout(leftReceiptPanel, BoxLayout.Y_AXIS));
+        leftReceiptPanel.setPreferredSize(new Dimension(400,1000));
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
 
         bottomQuickButtonPanel.setBackground(Color.CYAN);
@@ -138,7 +138,7 @@ public class EmployeeView extends JFrame implements ScannerListener {
         mainContainer.add(centerPanel, BorderLayout.CENTER);
 
         setTitle("Register");
-        setSize(1500, 1000);
+        setSize(1400, 800);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
@@ -228,6 +228,7 @@ public class EmployeeView extends JFrame implements ScannerListener {
         for (int i = 0; i < 12; i++) {
             final int finalI = i;
             JButton temp = createButton(itemList.get(i));
+            temp.setPreferredSize(new Dimension(50,50));
             temp.addActionListener((ActionEvent event) -> addLineItem(itemList.get(finalI)));
             bottomQuickButtonPanel.add(temp);
         }
@@ -237,6 +238,7 @@ public class EmployeeView extends JFrame implements ScannerListener {
         for (int i = 12; i < 18; i++) {
             final int finalI = i;
             JButton temp = createButton(itemList.get(i));
+            temp.setPreferredSize(new Dimension(50,50));
             temp.addActionListener((ActionEvent event) -> addLineItem(itemList.get(finalI)));
             rightQuickButtonPanel.add(temp);
         }

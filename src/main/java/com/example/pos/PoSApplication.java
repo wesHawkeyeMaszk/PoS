@@ -28,15 +28,6 @@ public class PoSApplication extends JFrame {
                 .headless(false)
                 .run(args);
     }
-/*
-    private static void displayMainFrame(ConfigurableApplicationContext context) {
-        SwingUtilities.invokeLater(() -> {
-            EmployeeScreenController employeeScreenController = context.getBean(EmployeeScreenController.class);
-            employeeScreenController.prepareAndOpenFrame();
-        });
-    }
-
- */
 
     private static void displayLoginFrame(ConfigurableApplicationContext context) {
         SwingUtilities.invokeLater(() -> {

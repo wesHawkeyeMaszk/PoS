@@ -3,6 +3,7 @@ package com.example.pos.services;
 import com.example.pos.model.Item;
 import com.example.pos.repositories.ItemRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -14,7 +15,8 @@ import java.util.Scanner;
 @AllArgsConstructor
 public class TSVReaderService {
 
-    private final ItemRepository itemRepository;
+    @Autowired
+    ItemRepository itemRepository;
 
     public void readTSV() {
         File file = getResourceFile("pricebook.tsv");

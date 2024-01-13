@@ -4,6 +4,7 @@ import com.example.pos.model.Item;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.math.BigDecimal;
@@ -19,6 +20,9 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class Checkout {
 
+    @Autowired
+    VirtualJournalEventController journalEventController;
+
     private static String cashier;
     private static Boolean isInCheckout;
     private static List<Item> basket;
@@ -29,7 +33,7 @@ public class Checkout {
     private static BigDecimal taxTotal;
     private static BigDecimal total;
     private static int transactionNumber = 0;
-    private final VirtualJournalEventController journalEventController;
+
 
     public void readyForCheckout() {
         isInCheckout = false;
